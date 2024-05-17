@@ -18,6 +18,7 @@ class NoteViewModel @Inject constructor(private val repository: NoteRepository) 
     val noteList = _noteList.asStateFlow()
 
     init {
+//        fetchNotes()
         viewModelScope.launch(Dispatchers.IO) {
             repository.getAllNotes().collect {
                 listOfNotes ->
@@ -25,7 +26,16 @@ class NoteViewModel @Inject constructor(private val repository: NoteRepository) 
                     Log.d("DEBUG", "Note list is Null or Empty")
                 } else {
                     _noteList.value = listOfNotes
+                    Log.d("DEBUG", listOfNotes.toString())
                 }
+            }
+        }
+    }
+
+    private fun fetchNotes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getAllNotes().collect { listOfNotes ->
+                _noteList.value = listOfNotes
             }
         }
     }
@@ -33,18 +43,27 @@ class NoteViewModel @Inject constructor(private val repository: NoteRepository) 
     fun addNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.addNote(note)
+            repository.getAllNotes().collect { listOfNotes ->
+                _noteList.value = listOfNotes
+            }
         }
     }
 
     fun updateNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateNote(note)
+            repository.getAllNotes().collect { listOfNotes ->
+                _noteList.value = listOfNotes
+            }
         }
     }
 
     fun removeNote(note: Note) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteNote(note)
+            repository.getAllNotes().collect { listOfNotes ->
+                _noteList.value = listOfNotes
+            }
         }
     }
 }
