@@ -44,11 +44,23 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.quocanle.jetpacknoteapp.model.Note
 import java.text.SimpleDateFormat
 
+// Appcenter
+import com.microsoft.appcenter.AppCenter;
+import com.microsoft.appcenter.analytics.Analytics;
+import com.microsoft.appcenter.crashes.Crashes;
+
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        enableEdgeToEdge()
+
+//        Appcenter
+        AppCenter.start(
+            application, "fca28074-431f-40a7-b063-70d74949735c",
+            Analytics::class.java, Crashes::class.java
+        );
+
         setContent {
             JetpackNoteAppTheme {
 //                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
